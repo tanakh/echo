@@ -1,8 +1,8 @@
 module Util where
 
 import           Data.Time
+import           Options.Applicative
 import           Text.Printf
-import Options.Applicative
 
 data ClientConfig
   = ClientConfig
@@ -33,13 +33,13 @@ clientConfig = ClientConfig
       & help "Active request number" )
   <*> option
       ( long "requests" & short 'n'
-      & metavar "REQUESTS" & value 1
+      & metavar "REQUESTS" & value 10000
       & help "Request number" )
 
 benchQPS :: Int -> IO () -> IO ()
 benchQPS qnum m = do
   ela <- measureTime m
-  printf "%.03f sec, %.03f qps\n" ela (fromIntegral qnum / ela)
+  printf "%d reqs in %.03f sec, %.03f qps\n" qnum ela (fromIntegral qnum / ela)
 
 measureTime :: IO () -> IO Double
 measureTime m = do
