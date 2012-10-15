@@ -1,0 +1,45 @@
+name:                echo
+version:             0.1.0.0
+-- synopsis:            
+-- description:         
+license:             BSD3
+license-file:        LICENSE
+author:              Hideyuki Tanaka
+maintainer:          tanaka.hideyuki@gmail.com
+-- copyright:           
+category:            Network
+build-type:          Simple
+cabal-version:       >=1.8
+
+executable simple-client
+  main-is:             simple-client.hs
+  other-modules:       Util
+  build-depends:       base ==4.*
+                     , bytestring
+                     , network
+                     , async
+                     , time
+                     , optparse-applicative
+
+executable conduit-client
+  main-is:             conduit-client.hs
+  other-modules:       Util
+  build-depends:       base ==4.*
+                     , bytestring
+                     , network
+                     , network-conduit
+                     , conduit
+                     , async
+                     , time
+                     , optparse-applicative
+
+executable ev-client
+  main-is:             ev-client.hs
+  other-modules:       Util
+  build-depends:       base ==4.*
+                     , bytestring
+                     , network
+                     , async
+                     , time
+                     , optparse-applicative
+

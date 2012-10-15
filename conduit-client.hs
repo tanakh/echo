@@ -14,14 +14,14 @@ import           Util
 opts :: ParserInfo ClientConfig
 opts = info (helper <*> clientConfig)
   ( fullDesc
-  & progDesc "simple client by Network"
-  & header "simpleclient" )
+  & progDesc "echo client by Conduit"
+  & header "conduit-client" )
 
 main :: IO ()
-main = withSocketsDo $ execParser opts >>= simpleclient
+main = withSocketsDo $ execParser opts >>= conduitClient
 
-simpleclient :: ClientConfig -> IO ()
-simpleclient ClientConfig {..} = benchQPS ccTotal $ do
+conduitClient :: ClientConfig -> IO ()
+conduitClient ClientConfig {..} = benchQPS ccTotal $ do
   ws <- replicateM ccConn $ async $ do
     runTCPClient (clientSettings ccPort $ S.pack ccHost) $ \ad -> do
       appSource ad $$ cond =$ appSink ad

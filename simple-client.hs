@@ -14,8 +14,8 @@ import           Util
 opts :: ParserInfo ClientConfig
 opts = info (helper <*> clientConfig)
   ( fullDesc
-  & progDesc "echo client by Conduit"
-  & header "conduit-client" )
+  & progDesc "echo client by Network"
+  & header "simpleclient" )
 
 main :: IO ()
 main = withSocketsDo $ execParser opts >>= simpleclient

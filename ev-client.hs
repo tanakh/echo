@@ -1,4 +1,5 @@
-{-# LANGUAGE OverloadedStrings, RecordWildCards        #-}
+{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE RecordWildCards   #-}
 
 import           Control.Applicative
 import           Control.Monad
