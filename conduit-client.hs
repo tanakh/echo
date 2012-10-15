@@ -2,20 +2,20 @@
 {-# LANGUAGE RecordWildCards   #-}
 
 import           Control.Concurrent.Async
-import qualified Control.Exception        as E
 import           Control.Monad
 import qualified Data.ByteString.Char8    as S
-import           Network
+import           Data.Conduit
+import           Data.Conduit.Network
+import           Network                  (withSocketsDo)
 import           Options.Applicative
-import           System.IO
 
 import           Util
 
 opts :: ParserInfo ClientConfig
 opts = info (helper <*> clientConfig)
   ( fullDesc
-  & progDesc "echo client by Conduit"
-  & header "conduit-client" )
+  & progDesc "simple client by Network"
+  & header "simpleclient" )
 
 main :: IO ()
 main = withSocketsDo $ execParser opts >>= simpleclient
@@ -23,10 +23,11 @@ main = withSocketsDo $ execParser opts >>= simpleclient
 simpleclient :: ClientConfig -> IO ()
 simpleclient ClientConfig {..} = benchQPS ccTotal $ do
   ws <- replicateM ccConn $ async $ do
-    h <- connectTo ccHost (PortNumber $ fromIntegral ccPort)
-    (`E.finally` hClose h) $ replicateM_ (ccTotal `div` ccConn) $ do
-      S.hPut h "hello\n"
-      hFlush h
-      "hello\n" <- S.hGet h 6
-      return ()
+    runTCPClient (clientSettings ccPort $ S.pack ccHost) $ \ad -> do
+      appSource ad $$ cond =$ appSink ad
   mapM_ wait ws
+  where
+    cond = replicateM_ (ccTotal `div` ccConn) $ do
+      yield "hello\n"
+      Just "hello\n" <- await
+      return ()
