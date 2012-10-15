@@ -36,6 +36,18 @@ clientConfig = ClientConfig
       & metavar "REQUESTS" & value 10000
       & help "Request number" )
 
+data ServerConfig
+  = ServerConfig
+    { scPort :: Int
+    }
+
+serverConfig :: Parser ServerConfig
+serverConfig = ServerConfig
+  <$> option
+      ( long "port" & short 'p'
+      & metavar "PORT" & value 1234
+      & help "Port number" )
+
 benchQPS :: Int -> IO () -> IO ()
 benchQPS qnum m = do
   ela <- measureTime m
