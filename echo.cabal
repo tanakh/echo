@@ -43,6 +43,16 @@ executable ev-client
                      , time
                      , optparse-applicative
 
+executable simple-server
+  main-is:             simple-server.hs
+  other-modules:       Util
+  build-depends:       base ==4.*
+                     , bytestring
+                     , network
+                     , async
+                     , time
+                     , optparse-applicative
+
 executable conduit-server
   main-is:             conduit-server.hs
   other-modules:       Util
@@ -54,5 +64,4 @@ executable conduit-server
                      , async
                      , time
                      , optparse-applicative
-
 
